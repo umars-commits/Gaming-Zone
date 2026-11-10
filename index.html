@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaming Zone · San Andreas, IGI & Vice City</title>
+  <!-- Font Awesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #1e2538, #0b0e14 90%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+
+    .game-zone {
+      max-width: 1200px;
+      width: 100%;
+      background: rgba(18, 25, 35, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      padding: 2.5rem 2rem 2rem;
+      box-shadow: 0 30px 50px -15px #000000, inset 0 1px 3px rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 215, 0, 0.18);
+    }
+
+    /* Header with profile image */
+    .zone-header {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid;
+      border-image: linear-gradient(90deg, #ffd966, #ffaa00, #ffd966) 1;
+      border-bottom-style: solid;
+    }
+
+    .profile-pic {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffd966;
+      box-shadow: 0 0 20px rgba(255, 200, 0, 0.5);
+      flex-shrink: 0;
+      background: #1a2433;
+    }
+
+    .zone-header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffe484, #ffb347, #ffd966);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 25px rgba(255, 200, 0, 0.6);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    /* Game grid */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin: 1rem 0 0.5rem;
+    }
+
+    /* Game tile */
+    .game-tile {
+      display: block;
+      text-decoration: none;
+      color: white;
+      border-radius: 1.8rem;
+      overflow: hidden;
+      background: #121a26;
+      box-shadow: 0 20px 30px -12px #000000, 0 0 0 1px #2a3240;
+      transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.2s;
+      border: 1px solid #2a3240;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .game-tile:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 30px 40px -12px #000000, 0 0 0 2px #ffb34780;
+      border-color: #ffb34740;
+    }
+
+    /* Image wrapper – square for cover art */
+    .tile-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #0d121c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .tile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease, filter 0.3s;
+    }
+
+    /* IGI image: shift down 30% to reveal top */
+    .game-tile.igi .tile-image img {
+      object-position: center 30%;
+    }
+
+    .game-tile:hover .tile-image img {
+      transform: scale(1.05);
+      filter: brightness(1.1) saturate(1.2);
+    }
+
+    /* Play overlay hint */
+    .tile-image::after {
+      content: "▶";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      text-shadow: 0 0 20px #ffb347, 0 0 10px #000;
+      pointer-events: none;
+    }
+
+    .game-tile:hover .tile-image::after {
+      opacity: 1;
+    }
+
+    /* Caption */
+    .tile-caption {
+      padding: 1rem 1.2rem 1.3rem;
+      background: linear-gradient(to top, #0f151f, #1a222e);
+      border-top: 1px solid #2a3442;
+    }
+
+    .tile-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+      color: #f0f4fc;
+    }
+
+    .tile-desc {
+      font-size: 0.9rem;
+      color: #9aa9bd;
+      line-height: 1.4;
+      margin-top: 0.2rem;
+    }
+
+    /* Accent for IGI */
+    .game-tile.igi:hover {
+      box-shadow: 0 30px 40px -12px #000000, 0 0 0 2px #a855f780;
+      border-color: #a855f750;
+    }
+
+    /* Accent for Vice City */
+    .game-tile.vice-city:hover {
+      box-shadow: 0 30px 40px -12px #000000, 0 0 0 2px #ff6b9d80;
+      border-color: #ff6b9d50;
+    }
+
+    /* Footer */
+    .zone-footer {
+      margin-top: 2.8rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #5d6b7e;
+      border-top: 1px solid #2a3240;
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Social icons row */
+    .social-links {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 0.2rem;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #1e2a38;
+      color: #b0c0d0;
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border: 1px solid #2e3d4f;
+    }
+
+    .social-links a:hover {
+      background: #2d3f53;
+      color: #ffffff;
+      transform: translateY(-3px);
+      border-color: #ffb34760;
+      box-shadow: 0 8px 15px -5px #000000;
+    }
+
+    .social-links a.instagram:hover { background: #e1306c; border-color: #e1306c; color: white; }
+    .social-links a.youtube:hover { background: #ff0000; border-color: #ff0000; color: white; }
+    .social-links a.twitter:hover { background: #1da1f2; border-color: #1da1f2; color: white; }
+    .social-links a.facebook:hover { background: #1877f2; border-color: #1877f2; color: white; }
+    .social-links a.discord:hover { background: #5865f2; border-color: #5865f2; color: white; }
+
+    /* Credit line */
+    .credit-line {
+      font-size: 0.9rem;
+      color: #7f8fa0;
+      letter-spacing: 0.3px;
+      font-weight: 400;
+      margin-top: 0.2rem;
+    }
+
+    .credit-line strong {
+      color: #ffd966;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .game-zone { padding: 1.8rem 1.2rem; }
+      .zone-header h1 { font-size: 1.9rem; }
+      .profile-pic { width: 48px; height: 48px; }
+      .games-grid { gap: 1.5rem; }
+      .tile-title { font-size: 1.2rem; }
+      .tile-desc { font-size: 0.8rem; }
+      .social-links a { width: 38px; height: 38px; font-size: 1rem; }
+      .credit-line { font-size: 0.8rem; }
+    }
+
+    @media (max-width: 400px) {
+      .games-grid { grid-template-columns: 1fr; }
+      .zone-header h1 { font-size: 1.5rem; }
+      .profile-pic { width: 40px; height: 40px; border-width: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game-zone">
+    <header class="zone-header">
+      <img 
+        src="https://static.vecteezy.com/system/resources/thumbnails/067/193/292/small/a-cartoon-wolf-wearing-sunglasses-and-holding-a-controller-illustration-vector.jpg" 
+        alt="Gaming Zone profile icon – cartoon wolf with controller" 
+        class="profile-pic"
+      >
+      <h1>Gaming Zone</h1>
+    </header>
+
+    <div class="games-grid">
+      <!-- GAME 1: GTA San Andreas – updated cover image -->
+      <a class="game-tile" href="https://teozeng.dev/web-gta/" target="_self" rel="noopener">
+        <div class="tile-image">
+          <img 
+            src="https://i5.walmartimages.com/seo/Grand-Theft-Auto-San-Andreas-PlayStation-2_36d22d3d-d085-4d5a-b083-446d3d61b655.111dd791cd796c3cd958d0efbb56a634.jpeg" 
+            alt="GTA San Andreas official box art"
+            loading="lazy"
+            onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg';"
+          >
+        </div>
+        <div class="tile-caption">
+          <div class="tile-title">San Andreas</div>
+          <div class="tile-desc">
+            Open-world action classic — explore cities, complete missions, and cause chaos in this legendary sandbox.
+          </div>
+        </div>
+      </a>
+
+      <!-- GAME 2: Project IGI – image shifted down 30% -->
+      <a class="game-tile igi" href="https://playigi.com/game/?utm_source=chatgpt.com" target="_self" rel="noopener">
+        <div class="tile-image">
+          <img 
+            src="https://m.media-amazon.com/images/M/MV5BYzBjNWQyM2YtZWVmNS00YzMxLTk4MTQtN2QzODQ2YjI0MDQ3XkEyXkFqcGc@._V1_.jpg" 
+            alt="Project IGI tactical shooter game cover"
+            loading="lazy"
+            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80';"
+          >
+        </div>
+        <div class="tile-caption">
+          <div class="tile-title">Project IGI</div>
+          <div class="tile-desc">
+            Tactical stealth shooter — infiltrate enemy bases, complete covert missions, and survive intense combat.
+          </div>
+        </div>
+      </a>
+
+      <!-- GAME 3: GTA Vice City – updated cover image -->
+      <a class="game-tile vice-city" href="https://gtavice.city" target="_self" rel="noopener">
+        <div class="tile-image">
+          <img 
+            src="https://m.media-amazon.com/images/M/MV5BYTcwMWYzMjgtYjQwYy00ODA2LTlkMTgtMzE0Y2RlYzJlMGI5XkEyXkFqcGc@._V1_.jpg" 
+            alt="GTA Vice City official box art"
+            loading="lazy"
+            onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/en/c/ce/Vice-city-cover.jpg';"
+          >
+        </div>
+        <div class="tile-caption">
+          <div class="tile-title">Vice City</div>
+          <div class="tile-desc">
+            80s open-world classic — build an empire, cruise the streets, and live the dream.
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Footer with social icons and credit -->
+    <footer class="zone-footer">
+      <div class="social-links">
+        <a href="#" class="instagram" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="youtube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="twitter" target="_blank" rel="noopener" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" class="facebook" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="discord" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
+      </div>
+      <div class="credit-line">
+        Designed &amp; Developed By <strong>Umar Abbasi</strong>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
